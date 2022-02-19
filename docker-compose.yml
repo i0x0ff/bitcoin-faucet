@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: npm run start
+    volumes:
+     - .:/srv/faucet
+    environment:
+      BITCOIND_HOST: 127.0.0.1
+      BITCOIND_RPCPORT: 8883
+      BITCOIND_USER: user
+      BITCOIND_PASS: pass
+      MONGODB_HOST: root:pass@db
+      FAUCET_NAME: CTV Signet Faucet
+      FAUCET_HOUR_MAX: 1
+      FAUCET_DAY_MAX: 5
+      FAUCET_WEEK_MAX: 10
+      FAUCET_MIN: 1
+      FAUCET_HOUR_SPLIT: 10
+      EXPLORER_URL: "https://explorer.ctvsignet.com/tx/"
+      SECRET: "you-must-change-me-to-something-unique"
+    ports:
+      - "127.0.0.1:8123:8123"
+    depends_on:
+     - db
+    networks:
+      - backend
+
+  db:
+    image: mongo:5.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass
+    volumes:
+      - faucet-storage:/data/db
+    networks:
+      - backend
+
+networks:
+  backend:
+    name: backend
+
+volumes:
+  faucet-storage:

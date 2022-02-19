@@ -1,6 +1,6 @@
 import { db } from '../db';
 
-const config = require('../config'); // no ts
+import config from '../config'; // no ts
 
 const HOUR = 3600000;
 const DAY = 24 * HOUR;

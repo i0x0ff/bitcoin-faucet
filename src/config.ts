@@ -24,9 +24,9 @@ const config = {
     faucetMin: Number.parseInt(process.env.FAUCET_MIN || "100", 10) * mBTC,
     // we expect 10 people to claim coins from the faucet each hour, so we will by default
     // send (hour remaining coins)/10 coins, with a lower cap of faucetMin
-    faucetHourSplit: process.env.FAUCET_HOUR_SPLIT || 10,
+    faucetHourSplit: Number.parseInt(process.env.FAUCET_HOUR_SPLIT || "10", 10),
     explorerUrl: process.env.EXPLORER_URL || "https://explorer.bc-2.jp/tx/",
-    sessionSecret: 'placesecrethere',
+    sessionSecret: process.env.SECRET || "change-me-you-must",
 };
 
 export default config;

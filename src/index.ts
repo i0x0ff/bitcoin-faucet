@@ -60,9 +60,9 @@ const check = async (req: Request, _res: Response) => {
 }
 
 const render = (_req: Request, res: Response, filebasename: string, data: MixedData) => {
-    const filename = `../html/${filebasename.includes('.') ? filebasename : `${filebasename}.html`}`;
+    const filename = `./html/${filebasename.includes('.') ? filebasename : `${filebasename}.html`}`;
     if (!fs.existsSync(filename)) {
-        res.status(400).send({ message: 'file not found' });
+        res.status(400).send({ message: 'file not found' }  );
         return;
     }
     if (filename.endsWith('.html')) {
@@ -79,7 +79,7 @@ const render = (_req: Request, res: Response, filebasename: string, data: MixedD
         return;
     }
     // pass file on
-    res.sendFile(path.join(`${__dirname}/${filename}`));
+    res.sendFile(path.join(`${__dirname}/../${filename}`));
 };
 
 const connect = async (req: Request, res: Response) => {
@@ -198,9 +198,13 @@ const makeClaim = async (params: MixedData, req: Request, res: Response): Promis
     }
     bitcoin.sendToAddress(address, sat2BTC(amount), async (err, result) => {
         console.log(`send ${amount} sats = ${sat2BTC(amount as number)} BTC to ${address} ${JSON.stringify(err)} ${JSON.stringify(result)}`);
-        if (err) throw new Error('Internal error');
-        await claim.record(new Date().getTime(), amount as number);
-        res.send(`Payment of ${sat2BTC(amount as number)} BTC sent with txid ${result!.result}`);
+        if (err) {
+            console.error(err);
+            res.send("There was a problem with sending...")
+        } else {
+            await claim.record(new Date().getTime(), amount as number);
+            res.send(`Payment of ${sat2BTC(amount as number)} BTC sent with txid ${result!.result}`);
+        }
     });
 };
 
