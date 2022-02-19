@@ -29,6 +29,13 @@ services:
      - db
     networks:
       - backend
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "20"
+
 
   db:
     image: mongo:5.0
@@ -39,6 +46,13 @@ services:
       - faucet-storage:/data/db
     networks:
       - backend
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "20"
+
 
 networks:
   backend:

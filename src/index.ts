@@ -200,7 +200,7 @@ const makeClaim = async (params: MixedData, req: Request, res: Response): Promis
         console.log(`send ${amount} sats = ${sat2BTC(amount as number)} BTC to ${address} ${JSON.stringify(err)} ${JSON.stringify(result)}`);
         if (err) {
             console.error(err);
-            res.send("There was a problem with sending...")
+            res.send("Unable to send transaction")
         } else {
             await claim.record(new Date().getTime(), amount as number);
             res.send(`Payment of ${sat2BTC(amount as number)} BTC sent with txid ${result!.result}`);
